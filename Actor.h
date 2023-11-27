@@ -9,7 +9,7 @@ public:
 	// 뒤에 0을 붙이면 순수 함수라고 구현을 강제합니다.
 	// virtual void BeginPlay() = 0;
 	virtual void BeginPlay();
-	virtual void Tick(int KeyCode);
+	virtual void Tick();
 	virtual void Render();
 
 	// accessor
@@ -21,14 +21,14 @@ public:
 	inline void SetX(int NewX) { X = NewX; }
 	inline void SetY(int NewY) { Y = NewY; }
 
-	inline bool operator<(const AActor* RHS) const
+	virtual bool operator<(const AActor& RHS) const
 	{
-		return this->SortOrder < RHS->SortOrder;
+		return this->SortOrder < RHS.SortOrder;
 	}
 
-	inline bool operator>(const AActor* RHS) const
+	virtual bool operator>(const AActor& RHS) const
 	{
-		return this->SortOrder < RHS->SortOrder;
+		return this->SortOrder > RHS.SortOrder;
 	}
 
 	int SortOrder;

@@ -8,7 +8,7 @@ public:
 	virtual ~APlayer();
 
 	// Tick 재정의, 이는 액터마다 하는일이 다르기 때문에 자식 것을 재정의합니다.
-	virtual void Tick(int KeyCode) override;
+	virtual void Tick() override;
 	bool IsCollide(int NewX, int NEwY);
 };
 

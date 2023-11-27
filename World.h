@@ -11,7 +11,7 @@ public:
 
 	void SpawnActor(AActor* NewActor);	// 액터생성
 
-	void Tick(int KeyCode);
+	void Tick();
 	void Render();
 
 	void SortRenderOrder();

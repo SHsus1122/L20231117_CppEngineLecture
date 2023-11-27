@@ -35,6 +35,7 @@ using namespace std;
 //{
 //	if (LHS.Money < RHS.Money)
 //	{
+//		std::cout << LHS.Money << std::endl;
 //		return true;
 //	}
 //	return false;
@@ -50,11 +51,13 @@ int main()
 	//NHRS.push_back(NHR(40));
 	//NHRS.push_back(NHR(50));
 	////sort(NHRS.begin(), NHRS.end());
-	//sort(NHRS.begin(), NHRS.end(), [](const NHR& LHS, const NHR& RHS)
-	//	{
-	//		return LHS.Money < RHS.Money;
-	//	});
+	////sort(NHRS.begin(), NHRS.end(), [](const NHR& LHS, const NHR& RHS)
+	////	{
+	////		return LHS.Money < RHS.Money;
+	////	});
 	//// 값을 가져오되 복사 ㄴㄴ 참조해서 가져와라 const 는 변경 ㄴㄴ
+	//sort(NHRS.begin(), NHRS.end(), compare);
+
 	//for (const auto& Data : NHRS)
 	//{
 	//	cout << Data.Money << endl;

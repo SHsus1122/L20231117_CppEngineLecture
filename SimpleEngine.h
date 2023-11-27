@@ -2,7 +2,15 @@
 #include <string>
 
 // 이렇게 클래스 앞에 한번만 해서 사용하던가
+// 전방 선언(Forward Declaration)
+// C++ 에서는 미리 함수를 정의하지 않으면 순차적으로 코드를 읽어들여 오류를 발생시킵니다.(식별자 미발견)
+// 하지만 이처럼 해주면 식별자를 정의하기 전 식별자의 존재를 컴파일러에 미리 알리게 됩니다.
+// 이를 통해 컴파일 시간을 단축시키며, 헤더파일 간의 의존성을 낮추게 됩니다.(순환참조도 방지)
+// 결과적으로 코드의 모듈성을 향상시키게 됩니다.
 class UWorld;
+class AActor;
+class AGameMode;
+class AGameState;
 
 class SimpleEngine
 {
@@ -34,18 +42,35 @@ public:
 		return Instance; 
 	}
 
+	static int KeyCode;
+
+	// 전방선언 후 가져오기 위해서
+	static AGameState* GetGameState()
+	{
+		return GetInstance()->GameState;
+	}
+
+	static AGameMode* GetGameMode()
+	{
+		return GetInstance()->GameMode;
+	}
+
 protected:
 	// 아니면 이렇게 하나하나씩 쓰던가 자유입니다.
 	UWorld* World;
 	bool IsRunning;
 
 	// 입력은 엔진이 안 받되 밖에 노출되면 안됨 원래 int 로 받으면 안됩니다. 왜냐하면, ... ?
-	int Input();
-	void Tick(int KeyCode);
+	void Input();
+	void Tick();
 	void Render();
 
 	// 이렇게 정적으로 만들면 사용하기전에 반드시 초기화를 해줘야 합니다.
 	static SimpleEngine* Instance;
+
+	// 전방 선언 해줍니다. 초기화 때 사용하기 위해서
+	AGameMode* GameMode;
+	AGameState* GameState;
 };
 
 // UE5 방식으로 하는법

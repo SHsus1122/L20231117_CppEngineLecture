@@ -7,11 +7,16 @@
 #include "Monster.h"
 #include "Floor.h"
 #include "Goal.h"
+#include "GameMode.h"
+#include "GameState.h"
 
 SimpleEngine* SimpleEngine::Instance = nullptr;
+int SimpleEngine::KeyCode = 0;
 
 SimpleEngine::SimpleEngine()
 {
+	GameMode = nullptr;
+	GameState = nullptr;
 	Init();
 }
 
@@ -35,10 +40,9 @@ void SimpleEngine::Run()
 		// Tick
 		// Render
 		// World; // 계속 돌아가야 해서
-		int KeyCode = Input();
-
 		// 원래는 물리 처리도 하면 더 좋긴 합니다. 이후 화면도 복구하는 등... 우리는 필요 없습니다.
-		Tick(KeyCode);
+		Input();
+		Tick();
 		// 랜더하기 전에 할 일으로 화면 지우기 Clear Screen
 		system("cls");	// 이 코드가 화면 지우기 코드입니다.
 		Render();
@@ -52,6 +56,8 @@ void SimpleEngine::Stop()
 
 void SimpleEngine::Term()
 {
+	GameMode = nullptr;
+	GameState = nullptr;
 	IsRunning = false;
 	delete World;
 }
@@ -68,12 +74,12 @@ void SimpleEngine::LoadLevel(std::string Filename)
 	std::string Map[10] = {
 		"**********",
 		"*P       *",
+		"*     M  *",
 		"*        *",
 		"*        *",
-		"*    M   *",
 		"*        *",
 		"*        *",
-		"*        *",
+		"* M      *",
 		"*       G*",
 		"**********",
 	};
@@ -113,6 +119,13 @@ void SimpleEngine::LoadLevel(std::string Filename)
 
 	GetWorld()->SortRenderOrder();
 
+	// 이제 게임모드를 강제로 구현하게 합니다.
+	GameMode = new AGameMode();
+	GetWorld()->SpawnActor(GameMode);
+	GameState = new AGameState();
+	GetWorld()->SpawnActor(GameState);
+
+
 	/*for (int i = 0; i < 10; i++) 
 	{
 		for (int j = 0; j < 10; j++) 
@@ -129,18 +142,16 @@ void SimpleEngine::LoadLevel(std::string Filename)
 }
 
 // 키 입력 받으면 키 값 리턴
-int SimpleEngine::Input()
+void SimpleEngine::Input()
 {
-	int KeyCode = _getch();
-
-	return KeyCode;
+	KeyCode = _getch();
 }
 
 // 틱에서 하는 것은 모든 액터에 대한 처리
 // 액터에게 키를 줘서 그것이 맞으면 입력에 맞게 움직여야 하기 때문입니다.
-void SimpleEngine::Tick(int KeyCode)
+void SimpleEngine::Tick()
 {
-	GetWorld()->Tick(KeyCode);
+	GetWorld()->Tick();
 }
 
 void SimpleEngine::Render()

@@ -3,6 +3,8 @@
 #include <windows.h>
 #include "World.h"
 #include "SimpleEngine.h"
+#include "Goal.h"
+#include "GameState.h"
 
 APlayer::APlayer()
 {
@@ -24,11 +26,11 @@ APlayer::~APlayer()
 {
 }
 
-void APlayer::Tick(int KeyCode)
+void APlayer::Tick()
 {
 	//AActor::Tick(KeyCode);	// 부모의 것을 호출합니다. 이것이 정규 문법입니다.
-	__super::Tick(KeyCode);	// 이것도 동일하나 비주얼 스튜디오(MS) 한정입니다.
-	
+	__super::Tick();	// 이것도 동일하나 비주얼 스튜디오(MS) 한정입니다.
+	int KeyCode = SimpleEngine::KeyCode;
 	// 우리는 충돌 관련은 빼고.. 움직임만... 아래처럼 상하좌우 움직임을 구현하게 됩니다.
 	// 이제 이를 움직임은 컴포넌트에서 하기 때문에 추후에 컴포넌트 로직으로 변경하게 될 겁니다.
 	if (KeyCode == 'A' || KeyCode == 'a')
@@ -59,9 +61,27 @@ void APlayer::Tick(int KeyCode)
 			Y++;
 		}
 	}
+	if (KeyCode == 27)
+	{
+		GEngine->Stop();
+	}
+
+	AGoal* MyGoal = nullptr;
+	for (auto Actor : GEngine->GetWorld()->GetAllActors())
+	{
+		MyGoal = dynamic_cast<AGoal*>(Actor);
+		if (MyGoal &&
+			MyGoal->GetX() == X &&
+			MyGoal->GetY() == Y)
+		{
+			// 몬스터가 플레이어를 죽였다는 것을 알려주기만 하고 처리는 다른곳에서 행합니다.
+			SimpleEngine::GetGameState()->IsNextLevel = true;
+			break;
+		}
+	}
 }
 
-bool APlayer::IsCollide(int NewX, int NewY)
+bool APlayer::IsCollide	(int NewX, int NewY)
 {
 	for (const auto& Actor : GEngine->GetWorld()->GetAllActors())
 	{
