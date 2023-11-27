@@ -41,7 +41,7 @@ using namespace std;
 //	return false;
 //}
 
-
+// 깃허브 커밋 푸쉬 이메일 계정 불일치 이후 재 테스트
 int main()
 {
 	//vector<NHR> NHRS;
@@ -62,7 +62,6 @@ int main()
 	//{
 	//	cout << Data.Money << endl;
 	//}
-
 
 	 /* 순수 가상 함수 설명
 	 virtual void BeginPlay() = 0; 이렇게 순수 함수로 해놓으면
