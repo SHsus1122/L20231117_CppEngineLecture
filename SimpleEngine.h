@@ -71,6 +71,9 @@ protected:
 	// 전방 선언 해줍니다. 초기화 때 사용하기 위해서
 	AGameMode* GameMode;
 	AGameState* GameState;
+
+	// 현재 위치에서 무슨 액터로 만들어 달라는 의미의 함수
+	void LoadActor(int NewX, int NewY, char Actor);
 };
 
 // UE5 방식으로 하는법

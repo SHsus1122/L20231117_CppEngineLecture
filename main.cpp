@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 
 using namespace std;
@@ -76,7 +77,7 @@ int main()
 
 
 	// 보통 이 아래 부분을 함수로 뽑아서 재정의 하게 됩니다.
-	MyEngine->LoadLevel("a.smap");
+	MyEngine->LoadLevel("Data/level01.smap");
 	MyEngine->Run();
 
 	delete MyEngine;

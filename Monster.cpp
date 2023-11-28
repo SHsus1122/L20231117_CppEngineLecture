@@ -80,7 +80,6 @@ void AMonster::Tick()
 			MyPlayer->GetY() == Y)
 		{
 			// 몬스터가 플레이어를 죽였다는 것을 알려주기만 하고 처리는 다른곳에서 행합니다.
-			// ::GetGameState()->IsGameOver = true;
 			SimpleEngine::GetGameState()->IsGameOver = true;
 			return;
 		}

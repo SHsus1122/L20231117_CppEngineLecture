@@ -10,6 +10,9 @@
 #include "GameMode.h"
 #include "GameState.h"
 
+#include <iostream>
+#include <fstream>
+
 SimpleEngine* SimpleEngine::Instance = nullptr;
 int SimpleEngine::KeyCode = 0;
 
@@ -21,7 +24,7 @@ SimpleEngine::SimpleEngine()
 }
 
 SimpleEngine::~SimpleEngine()
-{	
+{
 	Term();
 }
 
@@ -68,53 +71,40 @@ void SimpleEngine::LoadLevel(std::string Filename)
 	// Memory -> Disk : Serialize, Text(Json, csv), binary(umap)
 	// 메모리에 있는 것을 디스크에 저장하기위해 시리얼라이즈 하는 작업
 	//GetWorld()->SpawnActor(new APlayer(10, 10));
-	
+	//
 	// 벽 밑에는 바닥이 있어야 합니다.
 	// 우리 코드에서는 없는데 원래는 바닥도 존재해야 합니다.
-	std::string Map[10] = {
-		"**********",
-		"*P       *",
-		"*     M  *",
-		"*        *",
-		"*        *",
-		"*        *",
-		"*        *",
-		"* M      *",
-		"*       G*",
-		"**********",
-	};
+	//std::string Map[10] = {
+	//	"**********",
+	//	"*P       *",
+	//	"*     M  *",
+	//	"*        *",
+	//	"*        *",
+	//	"*        *",
+	//	"*        *",
+	//	"* M      *",
+	//	"*       G*",
+	//	"**********",
+	//};
 
-	for (int X = 0; X < 10; X++)
+	int Y = 0;
+	std::string line;
+	std::ifstream file(Filename);
+	if (file.is_open())
 	{
-		for (int Y = 0; Y < 10; Y++)
+		while (getline(file, line))
 		{
-			if (Map[Y][X] == '*')
+			for (int X = 0; X < line.length(); ++X)
 			{
-				// Wall
-				GetWorld()->SpawnActor(new AWall(X, Y));
+				LoadActor(X, Y, line[X]);
 			}
-			else if (Map[Y][X] == 'P')
-			{
-				// Player
-				GetWorld()->SpawnActor(new APlayer(X, Y));
-			}
-			else if (Map[Y][X] == 'M')
-			{
-				// Monster
-				GetWorld()->SpawnActor(new AMonster(X, Y));
-			}
-			else if (Map[Y][X] == 'G')
-			{
-				// Goal
-				GetWorld()->SpawnActor(new AGoal(X, Y));
-			}
-			else if (Map[Y][X] == ' ')
-			{
-				// Floor
-			}
-			// Floor
-			GetWorld()->SpawnActor(new AFloor(X, Y));
+			Y++;
 		}
+		file.close();
+	}
+	else
+	{
+		Stop();
 	}
 
 	GetWorld()->SortRenderOrder();
@@ -126,17 +116,17 @@ void SimpleEngine::LoadLevel(std::string Filename)
 	GetWorld()->SpawnActor(GameState);
 
 
-	/*for (int i = 0; i < 10; i++) 
+	/*for (int i = 0; i < 10; i++)
 	{
-		for (int j = 0; j < 10; j++) 
+		for (int j = 0; j < 10; j++)
 		{
-			if (i == 0 || i == 9 || j == 0 || j == 9) 
+			if (i == 0 || i == 9 || j == 0 || j == 9)
 			{
 				GetWorld()->SpawnActor(new AWall(j, i));
 			}
 		}
 	}*/
-	
+
 	// Disk -> Memory : Deserialize 
 	// 그 반대가 되는 작업을 방법입니다. Deserialize 라고 합니다.
 }
@@ -157,4 +147,34 @@ void SimpleEngine::Tick()
 void SimpleEngine::Render()
 {
 	GetWorld()->Render();
+}
+
+void SimpleEngine::LoadActor(int NewX, int NewY, char Actor)
+{
+	if (Actor == '*')
+	{
+		// Wall
+		GetWorld()->SpawnActor(new AWall(NewX, NewY));
+	}
+	else if (Actor == 'P')
+	{
+		// Player
+		GetWorld()->SpawnActor(new APlayer(NewX, NewY));
+	}
+	else if (Actor == 'M')
+	{
+		// Monster
+		GetWorld()->SpawnActor(new AMonster(NewX, NewY));
+	}
+	else if (Actor == 'G')
+	{
+		// Goal
+		GetWorld()->SpawnActor(new AGoal(NewX, NewY));
+	}
+	else if (Actor == ' ')
+	{
+		// Floor
+	}
+	// Floor
+	GetWorld()->SpawnActor(new AFloor(NewX, NewY));
 }

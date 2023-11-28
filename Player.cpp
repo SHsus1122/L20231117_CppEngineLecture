@@ -74,7 +74,7 @@ void APlayer::Tick()
 			MyGoal->GetX() == X &&
 			MyGoal->GetY() == Y)
 		{
-			// 몬스터가 플레이어를 죽였다는 것을 알려주기만 하고 처리는 다른곳에서 행합니다.
+			// 플레이어가 골을 했다는 것을 의미하며 이를 알려주기만 하고 처리는 다른 곳에서 행하게 됩니다.
 			SimpleEngine::GetGameState()->IsNextLevel = true;
 			break;
 		}
