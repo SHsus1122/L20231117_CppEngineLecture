@@ -1,5 +1,10 @@
 #pragma once
 #include <string>
+#include "SDL.h"
+
+#pragma comment(lib, "SDL2")
+#pragma comment(lib, "SDL2main")
+
 
 // 이렇게 클래스 앞에 한번만 해서 사용하던가
 // 전방 선언(Forward Declaration)
@@ -42,7 +47,7 @@ public:
 		return Instance; 
 	}
 
-	static int KeyCode;
+	static SDL_Keycode KeyCode;
 
 	// 전방선언 후 가져오기 위해서
 	static AGameState* GetGameState()
@@ -54,6 +59,17 @@ public:
 	{
 		return GetInstance()->GameMode;
 	}
+
+	static Uint64 GetWorldDeltaSeconds()
+	{
+		return GetInstance()->DeltaSeconds;
+	}
+
+	SDL_Window* MyWindow;
+	SDL_Renderer* MyRenderer;
+	SDL_Event MyEvent;
+	Uint64 DeltaSeconds;
+	Uint64 LastTime;
 
 protected:
 	// 아니면 이렇게 하나하나씩 쓰던가 자유입니다.

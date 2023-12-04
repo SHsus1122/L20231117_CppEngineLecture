@@ -14,12 +14,17 @@ APlayer::APlayer()
 	SortOrder = 500;
 }
 
-APlayer::APlayer(int NewX, int NewY, char NewShape, int NewSortOrder)
+APlayer::APlayer(int NewX, int NewY, char NewShape, int NewSortOrder, SDL_Color NewColor)
 {
 	Shape = 'P';
 	SetX(NewX);
 	SetY(NewY);
 	SortOrder = NewSortOrder;
+	Color = NewColor;
+	LoadBMP("TileData/Player.bmp", SDL_Color { 255, 0, 255, 0 });
+	bIsSprite = true;
+	SpriteSizeX = 5;
+	SpriteSizeY = 5;
 }
 
 APlayer::~APlayer()
@@ -30,38 +35,51 @@ void APlayer::Tick()
 {
 	//AActor::Tick(KeyCode);	// 부모의 것을 호출합니다. 이것이 정규 문법입니다.
 	__super::Tick();	// 이것도 동일하나 비주얼 스튜디오(MS) 한정입니다.
-	int KeyCode = SimpleEngine::KeyCode;
+	//int KeyCode = SimpleEngine::KeyCode;
+	int KeyCode = GEngine->MyEvent.key.keysym.sym;
+	
+	// 키 입력이 있을때만 가라는 의미
+	if (GEngine->MyEvent.type == SDL_KEYDOWN)
+	{
+		return;
+	}
+
+	if (SimpleEngine::GetGameState()->IsGameOver)
+	{
+		return;
+	}
+
 	// 우리는 충돌 관련은 빼고.. 움직임만... 아래처럼 상하좌우 움직임을 구현하게 됩니다.
 	// 이제 이를 움직임은 컴포넌트에서 하기 때문에 추후에 컴포넌트 로직으로 변경하게 될 겁니다.
-	if (KeyCode == 'A' || KeyCode == 'a')
+	if (KeyCode == SDLK_a)
 	{
 		if (!IsCollide(X - 1, Y))
 		{
 			X--;
 		}
 	}
-	if (KeyCode == 'D' || KeyCode == 'd')
+	if (KeyCode == SDLK_d)
 	{
 		if (!IsCollide(X + 1, Y))
 		{
 			X++;
 		}
 	}
-	if (KeyCode == 'W' || KeyCode == 'w')
+	if (KeyCode == SDLK_w)
 	{
 		if (!IsCollide(X, Y - 1))
 		{
 			Y--;
 		}
 	}
-	if (KeyCode == 'S' || KeyCode == 's')
+	if (KeyCode == SDLK_s)
 	{
 		if (!IsCollide(X, Y + 1))
 		{
 			Y++;
 		}
 	}
-	if (KeyCode == 27)
+	if (KeyCode == SDLK_ESCAPE)
 	{
 		GEngine->Stop();
 	}

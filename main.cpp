@@ -43,7 +43,7 @@ using namespace std;
 //}
 
 // 깃허브 커밋 푸쉬 이메일 계정 불일치 이후 재 테스트
-int main()
+int SDL_main(int argc, char* argv[])
 {
 	//vector<NHR> NHRS;
 

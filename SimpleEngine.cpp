@@ -20,12 +20,22 @@ SimpleEngine::SimpleEngine()
 {
 	GameMode = nullptr;
 	GameState = nullptr;
+	SDL_Init(SDL_INIT_EVERYTHING);
+	MyWindow = SDL_CreateWindow("HelloWorld", 100, 100, 800, 600, SDL_WINDOW_OPENGL);
+
+	MyRenderer = SDL_CreateRenderer(MyWindow, -1, SDL_RENDERER_ACCELERATED
+		| SDL_RENDERER_PRESENTVSYNC
+		| SDL_RENDERER_TARGETTEXTURE);
+
 	Init();
 }
 
 SimpleEngine::~SimpleEngine()
 {
 	Term();
+	SDL_DestroyRenderer(MyRenderer);
+	SDL_DestroyWindow(MyWindow);
+	SDL_Quit();
 }
 
 void SimpleEngine::Init()
@@ -38,17 +48,43 @@ void SimpleEngine::Run()
 {
 	while (IsRunning)
 	{
+		// 한 프레임에 걸린 시간 가져오기 위해서
+		DeltaSeconds = SDL_GetTicks64() - LastTime;
+		LastTime = SDL_GetTicks64();
+		Input();
+		// 이벤트 처리 부분
+		switch (MyEvent.type)
+		{
+			// 여기서 이제 닫기 버튼만을 하겠다는 의미
+		case SDL_QUIT:
+			IsRunning = false;
+			break;
+		case SDL_KEYDOWN:
+			// SDL_KEYDOWN 는 키 입력 이벤트며, SDLK_ESCAPE 는 ESC 키를 누르면 꺼집니다.
+			if (MyEvent.key.keysym.sym == SDLK_ESCAPE)
+			{
+				IsRunning = false;
+			}
+			break;
+		}
 		// 작업 순서 및 내용들
 		// Input
 		// Tick
 		// Render
 		// World; // 계속 돌아가야 해서
 		// 원래는 물리 처리도 하면 더 좋긴 합니다. 이후 화면도 복구하는 등... 우리는 필요 없습니다.
-		Input();
+		//Input();
 		Tick();
 		// 랜더하기 전에 할 일으로 화면 지우기 Clear Screen
-		system("cls");	// 이 코드가 화면 지우기 코드입니다.
+		//system("cls");	// 이 코드가 화면 지우기 코드입니다.
+
+
+		SDL_SetRenderDrawColor(GEngine->MyRenderer, 0, 0, 0, 0);
+		SDL_RenderClear(GEngine->MyRenderer);
+
 		Render();
+
+		SDL_RenderPresent(GEngine->MyRenderer);
 	}
 }
 
@@ -134,7 +170,8 @@ void SimpleEngine::LoadLevel(std::string Filename)
 // 키 입력 받으면 키 값 리턴
 void SimpleEngine::Input()
 {
-	KeyCode = _getch();
+	SDL_PollEvent(&MyEvent);
+	//KeyCode = MyEvent.key.keysym.sym;
 }
 
 // 틱에서 하는 것은 모든 액터에 대한 처리
