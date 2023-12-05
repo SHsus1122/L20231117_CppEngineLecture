@@ -14,7 +14,7 @@ APlayer::APlayer()
 	SortOrder = 500;
 }
 
-APlayer::APlayer(int NewX, int NewY, char NewShape, int NewSortOrder, SDL_Color NewColor)
+APlayer::APlayer(int NewX, int NewY, char NewShape, int NewSortOrder, SDL_Color NewColor, int NowDirection)
 {
 	Shape = 'P';
 	SetX(NewX);
@@ -25,6 +25,7 @@ APlayer::APlayer(int NewX, int NewY, char NewShape, int NewSortOrder, SDL_Color 
 	bIsSprite = true;
 	SpriteSizeX = 5;
 	SpriteSizeY = 5;
+	Direction = NowDirection;
 }
 
 APlayer::~APlayer()
@@ -55,6 +56,7 @@ void APlayer::Tick()
 	{
 		if (!IsCollide(X - 1, Y))
 		{
+			Direction = 0;
 			X--;
 		}
 	}
@@ -62,6 +64,7 @@ void APlayer::Tick()
 	{
 		if (!IsCollide(X + 1, Y))
 		{
+			Direction = 1;
 			X++;
 		}
 	}
@@ -69,6 +72,7 @@ void APlayer::Tick()
 	{
 		if (!IsCollide(X, Y - 1))
 		{
+			Direction = 2;
 			Y--;
 		}
 	}
@@ -76,6 +80,7 @@ void APlayer::Tick()
 	{
 		if (!IsCollide(X, Y + 1))
 		{
+			Direction = 3;
 			Y++;
 		}
 	}

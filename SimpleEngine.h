@@ -60,11 +60,13 @@ public:
 		return GetInstance()->GameMode;
 	}
 
+	// 오늘의 메인이 될 녀석중 하나로 이를 통해 프레임단위의 시간을 구합니다.
 	static Uint64 GetWorldDeltaSeconds()
 	{
 		return GetInstance()->DeltaSeconds;
 	}
 
+	// SDL 관련 포인터들 아래의 것들을 해줘서 GEngine-> 이런식으로 포인터로 편하게 사용합니다.
 	SDL_Window* MyWindow;
 	SDL_Renderer* MyRenderer;
 	SDL_Event MyEvent;

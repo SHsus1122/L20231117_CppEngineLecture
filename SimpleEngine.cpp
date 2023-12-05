@@ -20,9 +20,9 @@ SimpleEngine::SimpleEngine()
 {
 	GameMode = nullptr;
 	GameState = nullptr;
+	// SDL 관련 코드, 초기화와 윈도우 창을 그리고, 렌더하는 부분입니다.
 	SDL_Init(SDL_INIT_EVERYTHING);
 	MyWindow = SDL_CreateWindow("HelloWorld", 100, 100, 800, 600, SDL_WINDOW_OPENGL);
-
 	MyRenderer = SDL_CreateRenderer(MyWindow, -1, SDL_RENDERER_ACCELERATED
 		| SDL_RENDERER_PRESENTVSYNC
 		| SDL_RENDERER_TARGETTEXTURE);
@@ -170,6 +170,9 @@ void SimpleEngine::LoadLevel(std::string Filename)
 // 키 입력 받으면 키 값 리턴
 void SimpleEngine::Input()
 {
+	// 이 함수가 오늘의 가장 핵심인 이벤트 기반 처리를 해주는, 프레임단위 실행을 가능케 해줍니다.
+	// 이 함수는 이벤트 큐에서 이벤트를 가져오는 함수로 이벤트가 없으면 0을 있으면 1을 반환합니다.
+	// 이를 Run() 의 while 문에서 계속 호출하기 때문에 이벤트 처리가 가능해집니다.
 	SDL_PollEvent(&MyEvent);
 	//KeyCode = MyEvent.key.keysym.sym;
 }

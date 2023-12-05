@@ -43,6 +43,7 @@ void AMonster::Tick()
 	//int KeyCode = SimpleEngine::KeyCode;
 	
 	// 경과시간보다 큰 즉, 실행 하지 말 경우
+	// 아래의 if 문을 통해서 몬스터의 움직임을 500밀리 세컨드에 한 번씩으로 제한합니다.
 	ElaspedTime += GEngine->GetWorldDeltaSeconds();
 	if (ElaspedTime <= ProcessTime)
 	{

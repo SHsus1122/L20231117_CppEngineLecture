@@ -12,7 +12,6 @@ public:
 
 	
 	Uint32 ProcessTime;
-
 	Uint32 ElaspedTime;		// 경과 시간
 };
 
