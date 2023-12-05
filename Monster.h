@@ -11,8 +11,8 @@ public:
 	bool IsCollide(int NewX, int NEwY);
 
 	
-	Uint32 ProcessTime;
-	Uint32 ElaspedTime;		// 경과 시간
+	Uint64 ProcessTime;
+	Uint64 ElaspedTime;		// 경과 시간
 };
 
 enum class EMonsterDirection

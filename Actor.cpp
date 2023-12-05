@@ -5,7 +5,7 @@
 #include "Player.h"
 
 AActor::AActor() :
-	X(0), Y(0), Shape(' '), SortOrder(0), bCollide(false), Size(50), AnimationFrame(0)
+	X(0), Y(0), Shape(' '), SortOrder(0), bCollide(false), Size(50)
 {
 	MySurface = nullptr;
 	MyTexture = nullptr;
@@ -13,10 +13,6 @@ AActor::AActor() :
 	Color = SDL_Color {};
 	SpriteSizeX = 1;	// 나누는것을 기본 전제로 하기 때문에 0으로 나누면 안되니 1로 초기화
 	SpriteSizeY = 1;
-	Direction = 0;
-
-	ProcessTime = 300;	// 500밀리 세컨드에 한번 씩
-	ElaspedTime = 0;
 }
 
 // 아래의 방식이 accessor 의 사용법의 예시입니다.
@@ -33,10 +29,6 @@ AActor::AActor(int NewX, int NewY)
 	bIsSprite = false;
 	SpriteSizeX = 1;
 	SpriteSizeY = 1;
-	Direction = 0;
-	AnimationFrame = 0;
-	ProcessTime = 300;	// 500밀리 세컨드에 한번 씩
-	ElaspedTime = 0;
 }
 
 AActor::~AActor()
@@ -51,21 +43,6 @@ void AActor::BeginPlay()
 
 void AActor::Tick()
 {
-	ElaspedTime += GEngine->GetWorldDeltaSeconds();
-	if (ElaspedTime <= ProcessTime)
-	{
-		return;
-	}
-	else
-	{
-		AnimationFrame += Size;
-		if (AnimationFrame > 200)
-		{
-			AnimationFrame = 0;
-		}
-		// 실행을 했으면 이제 다시 초기화
-		ElaspedTime = 0;
-	}
 }
 
 void AActor::Render()
@@ -88,10 +65,10 @@ void AActor::Render()
 	// 아래의 코드가 VRAM -> Screen 하는 것이고 이는 VRAM 영역중에 있는 것을 옮겨서 그리는 것을 말합니다.
 	if (bIsSprite)
 	{
-		SDL_RenderCopy(GEngine->MyRenderer,
-			MyTexture,
-			new SDL_Rect{ AnimationFrame, Size * Direction, MySurface->w / SpriteSizeX, MySurface->h / SpriteSizeY },
-			new SDL_Rect{ X * Size, Y * Size, Size , Size });
+		//SDL_RenderCopy(GEngine->MyRenderer,
+		//	MyTexture,
+		//	new SDL_Rect{ AnimationFrame, Size * Direction, MySurface->w / SpriteSizeX, MySurface->h / SpriteSizeY },
+		//	new SDL_Rect{ X * Size, Y * Size, Size , Size });
 	}
 	else
 	{

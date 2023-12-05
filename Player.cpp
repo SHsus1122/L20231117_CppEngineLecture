@@ -12,6 +12,10 @@ APlayer::APlayer()
 	X = 10;
 	Y = 10;
 	SortOrder = 500;
+	SpriteIndex = 0;
+	SpriteDirection = 0;
+	ElaspedTime = 0;
+	ProcessTime = 400;
 }
 
 APlayer::APlayer(int NewX, int NewY, char NewShape, int NewSortOrder, SDL_Color NewColor, int NowDirection)
@@ -25,7 +29,11 @@ APlayer::APlayer(int NewX, int NewY, char NewShape, int NewSortOrder, SDL_Color 
 	bIsSprite = true;
 	SpriteSizeX = 5;
 	SpriteSizeY = 5;
-	Direction = NowDirection;
+	SpriteDirection = NowDirection;
+	SpriteIndex = 0;
+	SpriteDirection = 0;
+	ElaspedTime = 0;
+	ProcessTime = 400;
 }
 
 APlayer::~APlayer()
@@ -36,6 +44,15 @@ void APlayer::Tick()
 {
 	//AActor::Tick(KeyCode);	// 부모의 것을 호출합니다. 이것이 정규 문법입니다.
 	__super::Tick();	// 이것도 동일하나 비주얼 스튜디오(MS) 한정입니다.
+
+	ElaspedTime += GEngine->GetWorldDeltaSeconds();
+	if (ElaspedTime >= ProcessTime)
+	{
+		SpriteIndex++;
+		SpriteIndex = SpriteIndex % SpriteSizeX;
+		ElaspedTime = 0;
+	}
+
 	//int KeyCode = SimpleEngine::KeyCode;
 	int KeyCode = GEngine->MyEvent.key.keysym.sym;
 	
@@ -56,7 +73,7 @@ void APlayer::Tick()
 	{
 		if (!IsCollide(X - 1, Y))
 		{
-			Direction = 0;
+			SpriteDirection = 0;
 			X--;
 		}
 	}
@@ -64,7 +81,7 @@ void APlayer::Tick()
 	{
 		if (!IsCollide(X + 1, Y))
 		{
-			Direction = 1;
+			SpriteDirection = 1;
 			X++;
 		}
 	}
@@ -72,7 +89,7 @@ void APlayer::Tick()
 	{
 		if (!IsCollide(X, Y - 1))
 		{
-			Direction = 2;
+			SpriteDirection = 2;
 			Y--;
 		}
 	}
@@ -80,7 +97,7 @@ void APlayer::Tick()
 	{
 		if (!IsCollide(X, Y + 1))
 		{
-			Direction = 3;
+			SpriteDirection = 3;
 			Y++;
 		}
 	}
@@ -102,6 +119,21 @@ void APlayer::Tick()
 			break;
 		}
 	}
+}
+
+void APlayer::Render()
+{
+	__super::Render();	// 부모의 Render 코드를 호출
+
+	int SpriteWidth = MySurface->w / SpriteSizeX;
+	int SpriteHeight = MySurface->h / SpriteSizeY;
+	int StartX = SpriteIndex * SpriteWidth;
+	int StartY = SpriteDirection * SpriteHeight;
+
+	SDL_RenderCopy(GEngine->MyRenderer,
+		MyTexture,
+		new SDL_Rect{ StartX, StartY, SpriteWidth, SpriteHeight },
+		new SDL_Rect{ X * Size, Y * Size, Size , Size });
 }
 
 bool APlayer::IsCollide	(int NewX, int NewY)

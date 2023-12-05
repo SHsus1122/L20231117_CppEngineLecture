@@ -42,8 +42,6 @@ public:
 	// Uint 는 일반적인 int 랑 다르게 SDL 에서 특정 크기와 부호 없는 정수를 나타냅니다.
 	// 무엇이 다르냐면 이렇게 하면 크로스 플랫폼 및 다양한 환경에서 일관된 크기의 정수사용이 가능합니다.
 	Uint16 Size;
-	int Direction;
-	int AnimationFrame;
 
 	SDL_Surface* MySurface;  // 이미지 데이터를 담을 표면
 	SDL_Texture* MyTexture;  // 렌더링할 이미지의 텍스처
@@ -54,8 +52,6 @@ public:
 
 	virtual void LoadBMP(std::string Filename, SDL_Color ColorKey = SDL_Color{ 255, 255, 255, 0 });
 
-	Uint32 ProcessTime;
-	Uint32 ElaspedTime;		// 경과 시간
 protected:
 	int X;
 	int Y;
